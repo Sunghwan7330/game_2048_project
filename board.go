@@ -26,7 +26,7 @@ func (b Board) addNumber() {
 	b.board[x][y] = generateRandomAddNumber()
 }
 
-func createBoard(width, height int) *Board {
+func NewBoard(width, height int) *Board {
 	b := Board{}
 	b.width = width
 	b.height = height

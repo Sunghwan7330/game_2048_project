@@ -9,7 +9,7 @@ import (
 func TestCreateBoard(t *testing.T) {
 	width := 4
 	height := 4
-	b := createBoard(width, height)
+	b := NewBoard(width, height)
 
 	assert := assert.New(t)
 	assert.Equal(width, b.width)
