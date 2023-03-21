@@ -7,11 +7,28 @@ import (
 )
 
 func TestCreateBoard(t *testing.T) {
-	b := createBoard(4, 4)
+	width := 4
+	height := 4
+	b := createBoard(width, height)
 
 	assert := assert.New(t)
-	assert.Equal(4, b.width)
-	assert.Equal(4, b.height)
-	assert.Equal(4, len(b.board))
-	assert.Equal(4, len(b.board[0]))
+	assert.Equal(width, b.width)
+	assert.Equal(height, b.height)
+	assert.Equal(width, len(b.board))
+	assert.Equal(height, len(b.board[0]))
+
+	zeroCnt := 0
+	valueCnt := 0
+
+	for i := 0; i < width; i++ {
+		for j := 0; j < height; j++ {
+			if b.board[i][j] == 0 {
+				zeroCnt++
+			} else {
+				valueCnt++
+			}
+		}
+	}
+	assert.Equal(valueCnt, 2)
+	assert.Equal(zeroCnt, (width*height)-2)
 }
