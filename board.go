@@ -13,6 +13,12 @@ type Rand interface {
 	Intn(n int) int
 }
 
+type defaultRand struct{}
+
+func (r *defaultRand) Intn(n int) int {
+	return rand.Intn(n)
+}
+
 func generateRandomAddNumber() int {
 	//1/3 chance to generate 4.
 	//2/3 chance to generate 2.
@@ -40,6 +46,10 @@ func NewBoard(width, height int, rand Rand) *Board {
 	b.width = width
 	b.height = height
 	b.rand = rand
+
+	if b.rand == nil {
+		b.rand = &defaultRand{}
+	}
 
 	b.board = make([][]int, width)
 	for i := 0; i < width; i++ {

@@ -12,29 +12,17 @@ type mockRand struct {
 
 func (r *mockRand) Intn(n int) int {
 	vec := r.number
-	popped := vec[len(vec)-1]
-	vec = vec[:len(vec)-1]
-	r.number = vec
+	deqVal := vec[0]
+	r.number = vec[1:]
 
-	return popped
-}
-
-func (r *mockRand) set(n int) {
-	r.number = append(r.number, n)
+	return deqVal
 }
 
 func TestCreateBoard(t *testing.T) {
 	width := 4
 	height := 4
-	mRand := mockRand{}
-	mRand.set(3)
-	mRand.set(3)
-	mRand.set(2)
-	mRand.set(2)
-	mRand.set(2)
-	mRand.set(2)
 
-	b := NewBoard(width, height, &mRand)
+	b := NewBoard(width, height, &mockRand{number: []int{2, 2, 2, 2, 3, 3}})
 
 	assert := assert.New(t)
 	assert.Equal(width, b.width)
@@ -56,4 +44,7 @@ func TestCreateBoard(t *testing.T) {
 	}
 	assert.Equal(valueCnt, 2)
 	assert.Equal(zeroCnt, (width*height)-2)
+
+	assert.NotEqual(0, b.board[2][2])
+	assert.NotEqual(0, b.board[3][3])
 }
