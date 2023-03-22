@@ -14,9 +14,20 @@ type Screen struct {
 type ConsoleScreen struct{}
 
 func (screen ConsoleScreen) draw(board Board) {
-	fmt.Println("123")
+	fmt.Println("-------------------------")
+	fmt.Println("|     |     |     |     |")
+	fmt.Println("-------------------------")
+	fmt.Println("|     |     |     |     |")
+	fmt.Println("-------------------------")
+	fmt.Println("|     |     |     |     |")
+	fmt.Println("-------------------------")
+	fmt.Println("|     |     |     |     |")
+	fmt.Println("-------------------------")
 }
 
+func (screen Screen) draw() {
+	screen.screenInterface.draw(*screen.borad)
+}
 func NewScreen(board *Board, screen ScreenInterfece) *Screen {
 	s := Screen{}
 	s.borad = board
