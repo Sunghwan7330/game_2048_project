@@ -6,6 +6,11 @@ type Board struct {
 	width  int
 	height int
 	board  [][]int
+	rand   Rand
+}
+
+type Rand interface {
+	Intn(n int) int
 }
 
 func generateRandomAddNumber() int {
@@ -20,16 +25,21 @@ func generateRandomAddNumber() int {
 }
 
 func (b Board) addNumber() {
-	x := rand.Intn(b.width)
-	y := rand.Intn(b.height)
-
-	b.board[x][y] = generateRandomAddNumber()
+	for {
+		x := b.rand.Intn(b.width)
+		y := b.rand.Intn(b.height)
+		if b.board[x][y] == 0 {
+			b.board[x][y] = generateRandomAddNumber()
+			break
+		}
+	}
 }
 
-func NewBoard(width, height int) *Board {
+func NewBoard(width, height int, rand Rand) *Board {
 	b := Board{}
 	b.width = width
 	b.height = height
+	b.rand = rand
 
 	b.board = make([][]int, width)
 	for i := 0; i < width; i++ {
