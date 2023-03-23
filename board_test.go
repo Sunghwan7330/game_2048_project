@@ -48,3 +48,99 @@ func TestCreateBoard(t *testing.T) {
 	assert.NotEqual(0, b.board[2][2])
 	assert.NotEqual(0, b.board[3][3])
 }
+
+func TestMoveBoardLeft(t *testing.T) {
+	width := 4
+	height := 4
+	b := NewBoard(width, height, nil)
+	b.board = [][]int{
+		{2, 2, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+	}
+
+	expect := [][]int{
+		{4, 0, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+	}
+
+	b.move(MOVE_LEFT)
+
+	assert := assert.New(t)
+	assert.Equal(expect, b.board)
+}
+
+func TestMoveBoardLeft2(t *testing.T) {
+	width := 4
+	height := 4
+	b := NewBoard(width, height, nil)
+	b.board = [][]int{
+		{2, 2, 2, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+	}
+
+	expect := [][]int{
+		{4, 2, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+	}
+
+	b.move(MOVE_LEFT)
+
+	assert := assert.New(t)
+	assert.Equal(expect, b.board)
+}
+
+func TestMoveBoardLeft3(t *testing.T) {
+	width := 4
+	height := 4
+	b := NewBoard(width, height, nil)
+	b.board = [][]int{
+		{4, 2, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+	}
+
+	expect := [][]int{
+		{4, 2, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+	}
+
+	b.move(MOVE_LEFT)
+
+	assert := assert.New(t)
+	assert.Equal(expect, b.board)
+}
+
+func TestMoveBoardLeft4(t *testing.T) {
+	width := 4
+	height := 4
+	b := NewBoard(width, height, nil)
+	b.board = [][]int{
+		{0, 2, 0, 2},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+	}
+
+	expect := [][]int{
+		{4, 0, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+	}
+
+	b.move(MOVE_LEFT)
+
+	assert := assert.New(t)
+	assert.Equal(expect, b.board)
+}
