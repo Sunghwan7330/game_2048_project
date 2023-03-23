@@ -8,6 +8,28 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+type StdoutDump struct {
+	read       *os.File
+	write      *os.File
+	err        error
+	origStdout *os.File
+	buf        *[]byte
+}
+
+func (dump *StdoutDump) startDump(buffer *[]byte) {
+	dump.read, dump.write, dump.err = os.Pipe()
+	dump.origStdout = os.Stdout
+	os.Stdout = dump.write
+	dump.buf = buffer
+}
+
+func (dump *StdoutDump) endDump() {
+	dump.read.Read(*dump.buf)
+
+	// Restore
+	os.Stdout = dump.origStdout
+}
+
 func TestCreateConsoleScreen(t *testing.T) {
 	board := NewBoard(4, 4, nil)
 
@@ -27,16 +49,13 @@ func TestBlankBoard4By4(t *testing.T) {
 	}
 	s := NewScreen(board, ConsoleScreen{})
 
-	r, w, _ := os.Pipe()
-	origStdout := os.Stdout
-	os.Stdout = w
-
 	buf := make([]byte, 1024)
-	s.draw()
-	r.Read(buf)
+	stdoutDump := StdoutDump{}
+	stdoutDump.startDump(&buf)
 
-	// Restore
-	os.Stdout = origStdout
+	s.draw()
+	stdoutDump.endDump()
+
 	expected :=
 		"-------------------------\n" +
 			"|     |     |     |     |\n" +
