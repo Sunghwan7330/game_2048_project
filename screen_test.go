@@ -71,3 +71,36 @@ func TestBlankBoard4By4(t *testing.T) {
 	assert := assert.New(t)
 	assert.Equal(string(buf)[:length], expected)
 }
+
+func TestBlankBoard4By4_2(t *testing.T) {
+	board := NewBoard(4, 4, nil)
+	board.board = [][]int{
+		{0, 2, 0, 2},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+	}
+	s := NewScreen(board, ConsoleScreen{})
+
+	buf := make([]byte, 1024)
+	stdoutDump := StdoutDump{}
+	stdoutDump.startDump(&buf)
+
+	s.draw()
+	stdoutDump.endDump()
+
+	expected :=
+		"-------------------------\n" +
+			"|     |    2|     |    2|\n" +
+			"-------------------------\n" +
+			"|     |     |     |     |\n" +
+			"-------------------------\n" +
+			"|     |     |     |     |\n" +
+			"-------------------------\n" +
+			"|     |     |     |     |\n" +
+			"-------------------------\n"
+
+	length := bytes.IndexByte(buf, 0)
+	assert := assert.New(t)
+	assert.Equal(string(buf)[:length], expected)
+}

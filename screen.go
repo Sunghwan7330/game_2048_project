@@ -13,16 +13,27 @@ type Screen struct {
 
 type ConsoleScreen struct{}
 
+func drawLine(b Board) {
+	for i := 0; i < b.width; i++ {
+		fmt.Print("------")
+	}
+	fmt.Println("-")
+}
 func (screen ConsoleScreen) draw(board Board) {
-	fmt.Println("-------------------------")
-	fmt.Println("|     |     |     |     |")
-	fmt.Println("-------------------------")
-	fmt.Println("|     |     |     |     |")
-	fmt.Println("-------------------------")
-	fmt.Println("|     |     |     |     |")
-	fmt.Println("-------------------------")
-	fmt.Println("|     |     |     |     |")
-	fmt.Println("-------------------------")
+	drawLine(board)
+	for i := 0; i < board.height; i++ {
+		for j := 0; j < board.width; j++ {
+			var val string
+			if board.board[i][j] == 0 {
+				val = ""
+			} else {
+				val = fmt.Sprintf("%d", board.board[i][j])
+			}
+			fmt.Printf("|%5s", val)
+		}
+		fmt.Println("|")
+		drawLine(board)
+	}
 }
 
 func (screen Screen) draw() {
