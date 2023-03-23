@@ -15,6 +15,15 @@ type Rand interface {
 
 type defaultRand struct{}
 
+type MoveType int
+
+const (
+	MOVE_LEFT MoveType = iota
+	MOVE_RIGHT
+	MOVE_UP
+	MOVE_DOWN
+)
+
 func (r *defaultRand) Intn(n int) int {
 	return rand.Intn(n)
 }
@@ -61,4 +70,46 @@ func NewBoard(width, height int, rand Rand) *Board {
 	}
 
 	return &b
+}
+
+func (b *Board) move(moveType MoveType) {
+	switch moveType {
+	case MOVE_LEFT:
+		b.moveLeft()
+	case MOVE_RIGHT:
+	case MOVE_UP:
+	case MOVE_DOWN:
+	}
+}
+
+func (b *Board) moveLeft() {
+	for i := 0; i < 4; i++ {
+		move_idx := 0
+		cur_idx := 0
+		for j := 1; j < b.width; j++ {
+			if b.board[i][j] == 0 {
+				continue
+			}
+
+			if b.board[i][cur_idx] == 0 {
+				cur_idx = j
+				continue
+			}
+			if b.board[i][cur_idx] == b.board[i][j] {
+				b.board[i][move_idx] = b.board[i][cur_idx] * 2
+				if move_idx != cur_idx {
+					b.board[i][cur_idx] = 0
+				}
+				b.board[i][j] = 0
+				move_idx += 1
+				cur_idx = j
+			}
+		}
+		if b.board[i][cur_idx] != 0 {
+			b.board[i][move_idx] = b.board[i][cur_idx]
+			if move_idx != cur_idx {
+				b.board[i][cur_idx] = 0
+			}
+		}
+	}
 }
