@@ -78,6 +78,7 @@ func (b *Board) move(moveType MoveType) bool {
 	case MOVE_LEFT:
 		res = b.moveLeft()
 	case MOVE_RIGHT:
+		res = b.moveRight()
 	case MOVE_UP:
 	case MOVE_DOWN:
 	}
@@ -86,7 +87,7 @@ func (b *Board) move(moveType MoveType) bool {
 
 func (b *Board) moveLeft() bool {
 	isMove := false
-	for i := 0; i < 4; i++ {
+	for i := 0; i < b.height; i++ {
 		move_idx := 0
 		cur_idx := 0
 		for j := 1; j < b.width; j++ {
@@ -105,6 +106,40 @@ func (b *Board) moveLeft() bool {
 				}
 				b.board[i][j] = 0
 				move_idx += 1
+				cur_idx = j
+				isMove = true
+			}
+		}
+		if (b.board[i][cur_idx] != 0) && (move_idx != cur_idx) {
+			b.board[i][move_idx] = b.board[i][cur_idx]
+			b.board[i][cur_idx] = 0
+			isMove = true
+		}
+	}
+	return isMove
+}
+
+func (b *Board) moveRight() bool {
+	isMove := false
+	for i := 0; i < b.height; i++ {
+		move_idx := b.width - 1
+		cur_idx := b.width - 1
+		for j := b.width - 2; j >= 0; j-- {
+			if b.board[i][j] == 0 {
+				continue
+			}
+
+			if b.board[i][cur_idx] == 0 {
+				cur_idx = j
+				continue
+			}
+			if b.board[i][cur_idx] == b.board[i][j] {
+				b.board[i][move_idx] = b.board[i][cur_idx] * 2
+				if move_idx != cur_idx {
+					b.board[i][cur_idx] = 0
+				}
+				b.board[i][j] = 0
+				move_idx -= 1
 				cur_idx = j
 				isMove = true
 			}
