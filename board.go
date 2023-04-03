@@ -72,17 +72,20 @@ func NewBoard(width, height int, rand Rand) *Board {
 	return &b
 }
 
-func (b *Board) move(moveType MoveType) {
+func (b *Board) move(moveType MoveType) bool {
+	res := true
 	switch moveType {
 	case MOVE_LEFT:
-		b.moveLeft()
+		res = b.moveLeft()
 	case MOVE_RIGHT:
 	case MOVE_UP:
 	case MOVE_DOWN:
 	}
+	return res
 }
 
-func (b *Board) moveLeft() {
+func (b *Board) moveLeft() bool {
+	isMove := false
 	for i := 0; i < 4; i++ {
 		move_idx := 0
 		cur_idx := 0
@@ -103,13 +106,14 @@ func (b *Board) moveLeft() {
 				b.board[i][j] = 0
 				move_idx += 1
 				cur_idx = j
+				isMove = true
 			}
 		}
-		if b.board[i][cur_idx] != 0 {
+		if (b.board[i][cur_idx] != 0) && (move_idx != cur_idx) {
 			b.board[i][move_idx] = b.board[i][cur_idx]
-			if move_idx != cur_idx {
-				b.board[i][cur_idx] = 0
-			}
+			b.board[i][cur_idx] = 0
+			isMove = true
 		}
 	}
+	return isMove
 }
