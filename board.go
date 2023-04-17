@@ -110,6 +110,17 @@ func (b *Board) moveLeft() bool {
 				move_idx += 1
 				cur_idx = j
 				isMove = true
+			} else {
+				if b.board[i][move_idx] != 0 {
+					move_idx += 1
+					cur_idx = j
+				} else {
+					b.board[i][move_idx] = b.board[i][cur_idx]
+					b.board[i][cur_idx] = 0
+					cur_idx = j
+					move_idx += 1
+					isMove = true
+				}
 			}
 		}
 		if (b.board[i][cur_idx] != 0) && (move_idx != cur_idx) {
