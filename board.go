@@ -87,47 +87,54 @@ func (b *Board) move(moveType MoveType) bool {
 	return res
 }
 
+func (b *Board) moveArray(array []int) bool {
+	isMove := false
+	move_idx := 0
+	cur_idx := 0
+	for j := 1; j < len(array); j++ {
+		if array[j] == 0 {
+			continue
+		}
+
+		if array[cur_idx] == 0 {
+			cur_idx = j
+			continue
+		}
+		if array[cur_idx] == array[j] {
+			array[move_idx] = array[cur_idx] * 2
+			if move_idx != cur_idx {
+				array[cur_idx] = 0
+			}
+			array[j] = 0
+			move_idx += 1
+			cur_idx = j
+			isMove = true
+		} else {
+			if array[move_idx] != 0 {
+				move_idx += 1
+				cur_idx = j
+			} else {
+				array[move_idx] = array[cur_idx]
+				array[cur_idx] = 0
+				cur_idx = j
+				move_idx += 1
+				isMove = true
+			}
+		}
+	}
+	if (array[cur_idx] != 0) && (move_idx != cur_idx) {
+		array[move_idx] = array[cur_idx]
+		array[cur_idx] = 0
+		isMove = true
+	}
+	return isMove
+}
+
 func (b *Board) moveLeft() bool {
 	isMove := false
 	for i := 0; i < b.height; i++ {
-		move_idx := 0
-		cur_idx := 0
-		for j := 1; j < b.width; j++ {
-			if b.board[i][j] == 0 {
-				continue
-			}
-
-			if b.board[i][cur_idx] == 0 {
-				cur_idx = j
-				continue
-			}
-			if b.board[i][cur_idx] == b.board[i][j] {
-				b.board[i][move_idx] = b.board[i][cur_idx] * 2
-				if move_idx != cur_idx {
-					b.board[i][cur_idx] = 0
-				}
-				b.board[i][j] = 0
-				move_idx += 1
-				cur_idx = j
-				isMove = true
-			} else {
-				if b.board[i][move_idx] != 0 {
-					move_idx += 1
-					cur_idx = j
-				} else {
-					b.board[i][move_idx] = b.board[i][cur_idx]
-					b.board[i][cur_idx] = 0
-					cur_idx = j
-					move_idx += 1
-					isMove = true
-				}
-			}
-		}
-		if (b.board[i][cur_idx] != 0) && (move_idx != cur_idx) {
-			b.board[i][move_idx] = b.board[i][cur_idx]
-			b.board[i][cur_idx] = 0
-			isMove = true
-		}
+		res := b.moveArray(b.board[i])
+		isMove = isMove || res
 	}
 	return isMove
 }
@@ -135,32 +142,14 @@ func (b *Board) moveLeft() bool {
 func (b *Board) moveRight() bool {
 	isMove := false
 	for i := 0; i < b.height; i++ {
-		move_idx := b.width - 1
-		cur_idx := b.width - 1
-		for j := b.width - 2; j >= 0; j-- {
-			if b.board[i][j] == 0 {
-				continue
-			}
-
-			if b.board[i][cur_idx] == 0 {
-				cur_idx = j
-				continue
-			}
-			if b.board[i][cur_idx] == b.board[i][j] {
-				b.board[i][move_idx] = b.board[i][cur_idx] * 2
-				if move_idx != cur_idx {
-					b.board[i][cur_idx] = 0
-				}
-				b.board[i][j] = 0
-				move_idx -= 1
-				cur_idx = j
-				isMove = true
-			}
+		var arr []int
+		for j := b.width - 1; j >= 0; j-- {
+			arr = append(arr, b.board[i][j])
 		}
-		if (b.board[i][cur_idx] != 0) && (move_idx != cur_idx) {
-			b.board[i][move_idx] = b.board[i][cur_idx]
-			b.board[i][cur_idx] = 0
-			isMove = true
+		res := b.moveArray(arr)
+		isMove = isMove || res
+		for j := 0; j < b.width; j++ {
+			b.board[i][j] = arr[b.width-1-j]
 		}
 	}
 	return isMove
@@ -169,32 +158,14 @@ func (b *Board) moveRight() bool {
 func (b *Board) moveUp() bool {
 	isMove := false
 	for i := 0; i < b.width; i++ {
-		move_idx := 0
-		cur_idx := 0
-		for j := 1; j < b.height; j++ {
-			if b.board[j][i] == 0 {
-				continue
-			}
-
-			if b.board[cur_idx][i] == 0 {
-				cur_idx = j
-				continue
-			}
-			if b.board[cur_idx][i] == b.board[j][i] {
-				b.board[move_idx][i] = b.board[cur_idx][i] * 2
-				if move_idx != cur_idx {
-					b.board[cur_idx][i] = 0
-				}
-				b.board[j][i] = 0
-				move_idx += 1
-				cur_idx = j
-				isMove = true
-			}
+		var arr []int
+		for j := 0; j < b.height; j++ {
+			arr = append(arr, b.board[j][i])
 		}
-		if (b.board[cur_idx][i] != 0) && (move_idx != cur_idx) {
-			b.board[move_idx][i] = b.board[cur_idx][i]
-			b.board[cur_idx][i] = 0
-			isMove = true
+		res := b.moveArray(arr)
+		isMove = isMove || res
+		for j := 0; j < b.width; j++ {
+			b.board[j][i] = arr[j]
 		}
 	}
 	return isMove
@@ -203,32 +174,14 @@ func (b *Board) moveUp() bool {
 func (b *Board) moveDown() bool {
 	isMove := false
 	for i := 0; i < b.width; i++ {
-		move_idx := b.height - 1
-		cur_idx := b.height - 1
-		for j := b.height - 2; j >= 0; j-- {
-			if b.board[j][i] == 0 {
-				continue
-			}
-
-			if b.board[cur_idx][i] == 0 {
-				cur_idx = j
-				continue
-			}
-			if b.board[cur_idx][i] == b.board[j][i] {
-				b.board[move_idx][i] = b.board[cur_idx][i] * 2
-				if move_idx != cur_idx {
-					b.board[cur_idx][i] = 0
-				}
-				b.board[j][i] = 0
-				move_idx -= 1
-				cur_idx = j
-				isMove = true
-			}
+		var arr []int
+		for j := b.height - 1; j >= 0; j-- {
+			arr = append(arr, b.board[j][i])
 		}
-		if (b.board[cur_idx][i] != 0) && (move_idx != cur_idx) {
-			b.board[move_idx][i] = b.board[cur_idx][i]
-			b.board[cur_idx][i] = 0
-			isMove = true
+		res := b.moveArray(arr)
+		isMove = isMove || res
+		for j := 0; j < b.width; j++ {
+			b.board[j][i] = arr[b.width-1-j]
 		}
 	}
 	return isMove
