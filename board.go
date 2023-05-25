@@ -186,3 +186,42 @@ func (b *Board) moveDown() bool {
 	}
 	return isMove
 }
+
+func (b *Board) isGameOver() bool {
+	if b.isBoardFullOfNumber() == false {
+		return false
+	}
+
+	for i := 0; i < b.width; i++ {
+		for j := 0; j < b.height; j++ {
+			if b.isEqualNumberNearby(i, j) {
+				return false
+			}
+		}
+	}
+
+	return true
+}
+
+func (b *Board) isBoardFullOfNumber() bool {
+	for i := 0; i < b.width; i++ {
+		for j := 0; j < b.height; j++ {
+			if b.board[i][j] == 0 {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+func (b *Board) isEqualNumberNearby(i, j int) bool {
+	if i != b.width-1 && b.board[i][j] == b.board[i+1][j] {
+		return true
+	}
+
+	if j != b.height-1 && b.board[i][j] == b.board[i][j+1] {
+		return true
+	}
+
+	return false
+}

@@ -657,3 +657,59 @@ func TestMoveBoardDown6(t *testing.T) {
 	assert.Equal(res, false)
 	assert.Equal(expect, b.board)
 }
+
+func TestNotGameOver(t *testing.T) {
+	width := 4
+	height := 4
+	b := NewBoard(width, height, nil)
+	b.board = [][]int{
+		{16, 0, 0, 0},
+		{8, 0, 0, 0},
+		{4, 0, 0, 0},
+		{2, 0, 0, 0},
+	}
+	assert := assert.New(t)
+	assert.Equal(false, b.isGameOver())
+}
+
+func TestNotGameOver2(t *testing.T) {
+	width := 4
+	height := 4
+	b := NewBoard(width, height, nil)
+	b.board = [][]int{
+		{2, 2, 2, 2},
+		{2, 2, 2, 2},
+		{2, 2, 2, 2},
+		{2, 2, 2, 2},
+	}
+	assert := assert.New(t)
+	assert.Equal(false, b.isGameOver())
+}
+
+func TestNotGameOver3(t *testing.T) {
+	width := 4
+	height := 4
+	b := NewBoard(width, height, nil)
+	b.board = [][]int{
+		{2, 2, 2, 2},
+		{4, 8, 16, 32},
+		{32, 16, 8, 4},
+		{4, 8, 16, 32},
+	}
+	assert := assert.New(t)
+	assert.Equal(false, b.isGameOver())
+}
+
+func TestGameOver(t *testing.T) {
+	width := 4
+	height := 4
+	b := NewBoard(width, height, nil)
+	b.board = [][]int{
+		{16, 8, 4, 2},
+		{2, 4, 8, 16},
+		{16, 8, 4, 2},
+		{2, 4, 8, 16},
+	}
+	assert := assert.New(t)
+	assert.Equal(true, b.isGameOver())
+}

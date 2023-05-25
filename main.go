@@ -57,6 +57,9 @@ func doingGame() {
 		default:
 			fmt.Println("입력 오류!")
 		}
+		if board.isGameOver() {
+			break
+		}
 		if isMove {
 			board.addNumber()
 		}
