@@ -68,7 +68,7 @@ func doingGame() {
 
 func endGame() {
 	fmt.Println("Game over.")
-	//TODO print game result. (score)
+	fmt.Println("Score : ", board.score)
 }
 
 func main() {

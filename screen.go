@@ -20,6 +20,15 @@ func drawLine(b Board) {
 	fmt.Println("-")
 }
 func (screen ConsoleScreen) draw(board Board) {
+	drawScore(board)
+	drawGameBoard(board)
+}
+
+func drawScore(board Board) {
+	fmt.Println("현재 점수 : ", board.score)
+}
+
+func drawGameBoard(board Board) {
 	drawLine(board)
 	for i := 0; i < board.height; i++ {
 		for j := 0; j < board.width; j++ {
