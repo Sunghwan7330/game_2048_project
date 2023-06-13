@@ -7,6 +7,7 @@ type Board struct {
 	height int
 	board  [][]int
 	rand   Rand
+	score  int
 }
 
 type Rand interface {
@@ -55,6 +56,7 @@ func NewBoard(width, height int, rand Rand) *Board {
 	b.width = width
 	b.height = height
 	b.rand = rand
+	b.score = 0
 
 	if b.rand == nil {
 		b.rand = &defaultRand{}
@@ -102,6 +104,7 @@ func (b *Board) moveArray(array []int) bool {
 		}
 		if array[cur_idx] == array[j] {
 			array[move_idx] = array[cur_idx] * 2
+			b.score += array[move_idx]
 			if move_idx != cur_idx {
 				array[cur_idx] = 0
 			}

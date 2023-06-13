@@ -713,3 +713,20 @@ func TestGameOver(t *testing.T) {
 	assert := assert.New(t)
 	assert.Equal(true, b.isGameOver())
 }
+func TestScore(t *testing.T) {
+	width := 4
+	height := 4
+	b := NewBoard(width, height, nil)
+	b.board = [][]int{
+		{2, 2, 2, 2},
+		{2, 2, 2, 2},
+		{2, 2, 2, 2},
+		{2, 2, 2, 2},
+	}
+
+	res := b.move(MOVE_DOWN)
+
+	assert := assert.New(t)
+	assert.Equal(res, true)
+	assert.Equal(32, b.score)
+}
